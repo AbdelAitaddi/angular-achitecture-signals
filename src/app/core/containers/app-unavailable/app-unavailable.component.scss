@@ -1,0 +1,6 @@
+@use "../../../../styles/base/sizes";
+
+.container {
+  height: 100%;
+  padding: sizes.$medium-plus sizes.$large-plus sizes.$medium;
+}
