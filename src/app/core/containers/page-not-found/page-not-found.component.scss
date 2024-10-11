@@ -1,0 +1,8 @@
+@use "../../../../styles/mixins/layout";
+@use "../../../../styles/base/sizes";
+
+:host {
+  @include layout.flex();
+  height: 100%;
+  font-size: sizes.$medium-plus;
+}

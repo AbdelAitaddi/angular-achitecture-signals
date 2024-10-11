@@ -1,0 +1,54 @@
+@if($viewModel(); as vm) {
+  <div
+    class="container"
+    infiniteScroll
+    cdkScrollable
+    #infiniteScrollContainer
+    [fromRoot]="true"
+    [infiniteScrollContainer]="infiniteScrollContainer"
+    [infiniteScrollDistance]="1"
+    [infiniteScrollThrottle]="200"
+    [immediateCheck]="true"
+    [scrollWindow]="false"
+    [alwaysCallback]="true"
+    [infiniteScrollDisabled]="vm.allDataLoaded"
+    (scrolled)="onScrollDown()"
+  >
+    @defer (on idle; prefetch on idle) {
+      <app-apartment-filter
+        [boroughs]="vm.boroughs"
+        [cities]="vm.cities"
+        [selectedCity]="vm.selectedCity"
+        [selectedBorough]="vm.selectedBorough"
+        (citySelected)="onCitySelected($event)"
+        (boroughSelected)="onBoroughSelected($event)">
+      </app-apartment-filter>
+      <app-apartment-preview-list
+        class="apartment-preview"
+        [showLocation]="true"
+        [city]="vm.selectedCity"
+        [statistics]="vm.statistics"
+        [allDataLoaded]="vm.allDataLoaded"
+        [favouritesIds]="vm.favouritesIds"
+        [apartments]="vm.apartmentByCity | byBoroughs : vm.selectedBorough"
+      >
+      </app-apartment-preview-list>
+    } @placeholder {
+    } @loading (after 500ms; minimum 500ms) {
+      <div>Loading...</div>
+    }
+
+    @if(vm.loaded && !vm.apartmentByCity.length) {
+      <div class="no-results">
+        <strong>{{ 'i18n.apartments.listPage.content.searchNotMatch.text' | translate }}</strong>
+      </div>
+    }
+
+    @if(!vm.loading && !vm.loaded) {
+      <div class="loading-error">
+        <strong>{{ 'i18n.core.errorMessage.errorRetrievingData' | translate }}</strong>
+      </div>
+    }
+
+  </div>
+}

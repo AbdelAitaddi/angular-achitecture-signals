@@ -1,0 +1,62 @@
+
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon [svgIcon]="$icons().menu"></mat-icon>
+  </button>
+  <div class="app-name" routerLink="/" [info]="{ route: 'route' }">
+    {{ 'i18n.core.pageTitle.appName' | translate }}
+  </div>
+  <span class="spacer"></span>
+  <app-language-selection
+    [currentLanguageItem]="$currentLanguageItem()"
+    [languages]="$languageCollection()"
+    (selectLanguage)="selectLanguage($event)"
+  >
+  </app-language-selection>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav
+    #sidenav
+    [mode]="$sidenavMode()"
+    [opened]="$isOpened()"
+    [fixedInViewport]="true"
+    [autoFocus]="false"
+  >
+    <div class="sidenav-title" [attr.role]="'none'"
+         (click)="sidenav.toggle()">
+      <mat-icon [svgIcon]="$icons().locationCity"></mat-icon>
+      <h3>{{ 'i18n.core.pageTitle.appName' | translate }}</h3>
+    </div>
+
+    <mat-nav-list>
+
+      @defer (on immediate)  {
+        @for (nav of $navList(); track nav.name) {
+          <app-nav-item
+            [route]="nav.route"
+            [icon]="nav.icon"
+            [name]="nav.name"
+            [hint]="nav.hint"
+            [type]="nav.type"
+            (itemClicked)="onItemClicked($event); sidenav.toggle()"
+          >
+          </app-nav-item>
+        }
+      }
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    @if($loading()){
+      <div class="loading-indicator">
+        <mat-spinner data-test-id="loading-indicator" mode="indeterminate"></mat-spinner>
+      </div>
+    }
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
