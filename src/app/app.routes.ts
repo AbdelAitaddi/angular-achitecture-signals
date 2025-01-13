@@ -64,7 +64,10 @@ export function provideRouterConfig(): EnvironmentProviders {
       withEnabledBlockingInitialNavigation(),
       withComponentInputBinding(),
       withPreloading(PreloadAllModules),
-      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'enabled',
+      }),
       withRouterConfig({
         defaultQueryParamsHandling: 'merge',
         paramsInheritanceStrategy: 'always',
